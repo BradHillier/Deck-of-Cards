@@ -1,13 +1,18 @@
 html {
   position: fixed !important;
+  height: 100%;
   -webkit-user-select: none; /* Safari */
   -ms-user-select: none; /* IE 10 and IE 11 */
   user-select: none; /* Standard syntax */
 }
 
 body {
-    background-image: url("assets/bg.jpg");
-    overflow: hidden;
+    height: 100%;
+    user-select: none;
+    -webkit-user-select: none;
+    overflow: hidden !important;
+    /*background-image: url(https://wallpapertag.com/wallpaper/full/a/7/9/538114-wood-grain-desktop-wallpaper-2560x1600-for-htc.jpg);
+    background-size: 1500px 1000px;*/
 }
 
 .App {
@@ -262,4 +267,17 @@ body {
 .card-back {
     transform: rotateY(180deg);
     transform-style: preserve-3d;
+}
+
+button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    height: 60px;
+    width: 60px;
+    font-size: 20px;
+    text-align: center;
+    border-radius: 30px;
+    border: none;
+    background: white;
 }

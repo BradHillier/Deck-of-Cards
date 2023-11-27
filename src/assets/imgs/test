@@ -1,0 +1,5 @@
+#!/bin/bash
+
+for file in ./*.svg; do
+    awk '{gsub("/home/byron/art/cards/final/PNGs", "/Users/bradhillier/Developer/todo/src/assets/imgs")}1' $file > processed/$file
+done
