@@ -61,20 +61,8 @@ import styled, { keyframes } from 'styled-components'
 //     );
 // 
 // }
-
-const rotateAnimation = keyframes `
-    0% {
-        transform: rotate3d(0, 1, 0, 0deg) scale(1);
-    }
-    50% {
-        transform: rotate3d(0, 1, 0, 90deg) scale(1.3);
-    }
-    100% {
-        transform: rotate3d(0, 1, 0, 180deg) scale(1);
-    }
-`
-
-const rotateBackAnimation = keyframes`
+//
+const rotateAnimation = keyframes`
   0% {
     transform: rotate3d(0, 1, 0, 180deg) scale(1);
   }
@@ -85,6 +73,19 @@ const rotateBackAnimation = keyframes`
     transform: rotate3d(0, 1, 0, 0deg) scale(1);
   }
 `;
+
+
+const rotateBackAnimation = keyframes `
+    0% {
+        transform: rotate3d(0, 1, 0, 0deg) scale(1);
+    }
+    50% {
+        transform: rotate3d(0, 1, 0, 90deg) scale(1.3);
+    }
+    100% {
+        transform: rotate3d(0, 1, 0, 180deg) scale(1);
+    }
+`
 
 const CardContainer = styled.div.attrs(props => ({
     style: {
@@ -102,7 +103,7 @@ const CardContainer = styled.div.attrs(props => ({
         position: absolute;
     `
 
-    const CardBody = styled.div`
+const CardBody = styled.div`
     top: 0px;
     background: white;
     position: relative;
@@ -112,12 +113,15 @@ const CardContainer = styled.div.attrs(props => ({
     cursor: pointer;
     margin: 0 auto;
     animation: ${props => props.rotated ? rotateAnimation : rotateBackAnimation} 0.5s ease-in-out forwards;
+    animation-delay: ${props => props.animationdelay};
+    animation-play-state: ${props => props.animate ? "running" : "paused"};
     transform-style: preserve-3d;
     box-shadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
   `;
 
 const CardContent = styled.div`
     touch-action: none;
+    background: white;
     width: 100%;
     height: 100%;
     display: flex;
@@ -133,7 +137,10 @@ const Front = styled(CardContent).attrs(props => ({
         zIndex: props.rotated,
     }
 }))`
+        height: 95%;
+        top: 2.5%;
         tranform-style: preserve-3d;
+        justify-content: center;
     `
 
 const Back = styled(CardContent).attrs(props => ({
@@ -155,13 +162,14 @@ export const Card3D = ({
     zIndex,
     transition,
     animationdelay,
-    isFaceUp
+    isFaceUp,
+    animate
 }) => {
 
     const [frontContent, backContent] = children;
     return (
         <CardContainer top={top} left={left} zIndex={zIndex} transition={transition} animationdelay={animationdelay}>
-            <CardBody rotated={isFaceUp}> 
+            <CardBody rotated={isFaceUp} animate={animate} animationdelay={animationdelay}> 
                 <Front rotated={isFaceUp}>
                     {frontContent}
                 </Front>
