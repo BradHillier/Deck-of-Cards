@@ -11,8 +11,7 @@ body {
     user-select: none;
     -webkit-user-select: none;
     overflow: hidden !important;
-    /*background-image: url(https://wallpapertag.com/wallpaper/full/a/7/9/538114-wood-grain-desktop-wallpaper-2560x1600-for-htc.jpg);
-    background-size: 1500px 1000px;*/
+    background: green;
 }
 
 .App {
