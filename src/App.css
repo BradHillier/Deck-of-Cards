@@ -114,6 +114,15 @@ body {
  *          CARD           *
  * ========================*/
 
+img {     
+    user-drag: none;
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
 .card-container {
     transform: translate(-50%, -50%);
     width: 167.0869141px;           /* the size of the svg */
