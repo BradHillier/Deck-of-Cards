@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRotateRight } from '@fortawesome/free-solid-svg-icons'
+import { faArrowRotateRight, faHand, faShuffle } from '@fortawesome/free-solid-svg-icons'
 
 import './App.css';
 import { Card3D } from './components/card/Card';
@@ -14,7 +14,6 @@ const IMGs = getAllSVGs();
 const x_start = window.innerWidth / 2;
 const y_start = window.innerHeight / 2;
 
-
 function App() {
 
     const [state, setState] = useState(() => {
@@ -27,6 +26,7 @@ function App() {
                     id: count,
                     isSelected: false,
                     isDrag: false,
+                    isShuffling: false,
                     image: image,
                     position: {
                         x: x_start,
@@ -43,6 +43,8 @@ function App() {
                 }
             }),
             count: count,
+            inDeck: Array(count + 1).fill().map((el, idx) => idx),
+            isShuffling: false
         }
     })
 
@@ -51,27 +53,33 @@ function App() {
     }
 
     const pointerUpHandler = (event, id) => {
-            if (state.deck[id].isDrag) {
-                deselectCard(event, id);
-            } else {
-                // This also deselects the card
-                rotateCard(event, id);
-            }
+        if (state.deck[id].isDrag) {
+            deselectCard(event, id);
+        } else {
+            // This also deselects the card
+            rotateCard(event, id);
+        }
     }
 
     const pointerMoveHandler = (event, id) => {
         if (state.deck[id].isSelected) {
             if (state.deck[id].isInDeck) {
                 state.cardsInPlay++;
+                state.inDeck = state.inDeck.filter(num => num !== id);
+                console.log(state.inDeck);
             }
             moveCardToPointer(event, id);
         }
     }
 
     const pointerLeaveHandler = (event, id) => {
-        if (event.pointerType === "mouse") {
-            deselectCard(event, id);
-        }
+        //    if (event.pointerType === "mouse") {
+        //        if (state.deck[id].isSelected) {
+        //            moveCardToPointer(event, id);
+        //        }
+        //    } else {
+        //        deselectCard(event, id);
+        //    }
     }
 
     const selectCard = (event, id) => {
@@ -158,6 +166,7 @@ function App() {
     const returnCardsToDeck = () => {
         setState({ ...state,
             cardsInPlay: 0,
+            inDeck: [...state.deck].sort((a,b) => a.position.z - b.position.z).map(card => card.id),
             deck: state.deck.map(card => {
                 return {
                     ...card, 
@@ -195,41 +204,167 @@ function App() {
         })
     }
 
-    useEffect(startAnimation, [])
+    const drawCards = (num) => {
+        // Bug related to cards in deck and card.position.z not being synced
+        // the position in deck should be equivalent to the cards z-index
+        let ids = state.inDeck.splice(-num);
+        console.log(ids);
+        if (ids.length) {
+            setState({
+                ...state,
+                cardsInPlay: state.cardsInPlay + ids.length,
+                deck: state.deck.map(card => {
+                    if (ids.includes(card.id)) {
+                        const i = ids.indexOf(card.id);
+                        return {
+                            ...card,
+                            position: {
+                                x: x_start - (num / 2 * 81) + (i) * 81 + (15 * i), // card width padding
+                                y: y_start + 200,
+                                z: card.position.z
+                            },
+                            animationdelay: `0.${num - i + 1}s`,
+                            transition:  `0.6s ease-in-out`
+                        };
+                    }
+                    return card;
+                })
+            });
+        }
+    }
+
+    const shuffle = () => {
+        setState({
+            ...state,
+            isShuffling: true,
+            deck: state.deck.map(card => {
+                // animate cards in groups of four to inmitate a person shuffling 
+                const side = (Math.floor(card.position.z / 4)) % 2 === 0;
+                const delay = side ? card.id : 51 - card.id
+                return {
+                    ...card,
+                    animate: true,
+                    animationdelay: `${card.id / 300}s`,
+                }
+            })
+        })
+    }
+
+    useEffect(() => {
+        const handleAnimationEnd = () => {
+            setState({
+                ...state,
+                isShuffling: false,
+                deck: state.deck.map(card => {
+                    return {
+                        ...card,
+                        animate: false
+                    }
+                })
+            })
+        }
+        const cardContainer = document.getElementById(`card-51`).parentNode.parentNode;
+        if (cardContainer && state.isShuffling) {
+            cardContainer.addEventListener('animationend', handleAnimationEnd, {once: true});
+            // clean 
+            return () => {
+                cardContainer.removeEventListener('animationend', handleAnimationEnd);
+            }
+        }
+    }, [state.isShuffling]);
+
+
+    useEffect(startAnimation, []);
+
+
+    /**
+     * If a card is selected, move it the the cursor
+     *
+     * This avoids a card not following the cursor if the cursor
+     * moves too quickly
+     *
+     * This has no dependencies and will fire when any change to the DOM occurs
+     */
+    useEffect(() => {
+        const handleMouseMove = (event) => {
+            const selectedCard = state.deck.find(card => card.isSelected);
+            if (selectedCard) {
+                moveCardToPointer(event, selectedCard.id);
+            }
+        }
+
+        const  handleTouch = (event) => {
+            if (event.touches.length > 1) {
+                // If there are multiple touches (pinch), prevent default behavior
+                event.preventDefault();
+            }
+        }
+
+        window.addEventListener("mousemove", handleMouseMove);
+
+        //NOTE: passive: false is not reccomended as it may cause poor performance 
+        //      when scrolling
+        // Prevent the user from pinch zoom on desktop
+        window.addEventListener("wheel", (event) => event.preventDefault(), {passive:false});
+        // Prevent the user from pinch zoom on mobile and tablets
+        window.addEventListener("touchstart", (event) => handleTouch(event), {passive:false});
+
+        return () => {
+            // Remove event handler from window to avoid memory leak
+            window.removeEventListener("mousemove", handleMouseMove);
+        };
+    });
 
     return (
-        <div className="App">
+        <div className="App"> 
 
             <div className="container">
-                {
-                    state.deck.map(card => {
-                        return (
-                            <Card3D key={card.id}
-                                top={state.deck[card.id].position.y}
-                                left={state.deck[card.id].position.x}
-                                zIndex={state.deck[card.id].position.z}
-                                animate={state.deck[card.id].animate}
-                                isFaceUp={state.deck[card.id].isFaceUp}
-                                transition={state.deck[card.id].transition}
-                                animationdelay={state.deck[card.id].animationdelay}>
-                                <img src={card.image} alt={'card front'}style={{height: '100%', width: '100%'}}
-                                    onPointerLeave={event => pointerLeaveHandler(event, card.id, card.position.z)}
-                                    onPointerMove={event => pointerMoveHandler(event, card.id)}
-                                    onPointerUp={event => pointerUpHandler(event, card.id)}
-                                    onPointerDown={event => pointerDownHandler(event, card.id)} />
-                                <img src={backImage} alt={'card back'} style={{height: '100%', width: '100%'}}
-                                    onPointerLeave={event => pointerLeaveHandler(event, card.id, card.position.z)}
-                                    onPointerMove={event => pointerMoveHandler(event, card.id)}
-                                    onPointerUp={event => pointerUpHandler(event, card.id)}
-                                    onPointerDown={event => pointerDownHandler(event, card.id)} />
-                            </Card3D>
-                        )
-                    })
-                }
+            {
+                state.deck.map(card => {
+                    return (
+                        <Card3D key={card.id} 
+                            id={ card.id}
+                            top={state.deck[card.id].position.y}
+                            left={state.deck[card.id].position.x}
+                            zIndex={state.deck[card.id].position.z}
+                            animate={state.deck[card.id].animate}
+                            isFaceUp={state.deck[card.id].isFaceUp}
+                            transition={state.deck[card.id].transition}
+                            animationdelay={state.deck[card.id].animationdelay}
+                            shuffling={state.isShuffling}
+                        >
+                            <img src={card.image} alt={'card front'}style={{height: '100%', width: '100%'}}
+                id={`card-${card.id}`}
+                                onPointerMove={event => pointerMoveHandler(event, card.id)}
+                                onPointerUp={event => pointerUpHandler(event, card.id)}
+                                onPointerDown={event => pointerDownHandler(event, card.id)} 
+                            />
+                            <img src={backImage} alt={'card back'} style={{height: '100%', width: '100%'}}
+                                onPointerMove={event => pointerMoveHandler(event, card.id)}
+                                onPointerUp={event => pointerUpHandler(event, card.id)}
+                                onPointerDown={event => pointerDownHandler(event, card.id)} 
+                            />
+                        </Card3D>
+                    )
+                })
+            }
             </div>
-            <button onClick={returnCardsToDeck}>
-                <FontAwesomeIcon icon={faArrowRotateRight} />
-            </button>
+            <div id="top-bar">
+                <button onClick={returnCardsToDeck}>
+                    <FontAwesomeIcon icon={faArrowRotateRight} />
+                    <span>Reset</span>
+                </button>
+
+                <button id="drawbtn" onClick={event => drawCards(5)}>
+                    <FontAwesomeIcon icon={faHand} />
+                    <span>Draw</span>
+                </button>
+
+                <button id="shuffle-btn" onClick={event => shuffle()}>
+                    <FontAwesomeIcon icon={faShuffle} />
+                    <span>Shuffle</span>
+                </button>
+            </div>
         </div>
     );
 }
