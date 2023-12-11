@@ -141,6 +141,7 @@ const CardBody = styled.div`
     margin: 0 auto;
     transform: ${props => props.$faceUp ? 'rotate3d(0,1,0,180deg)' : 'rotate3d(0,1,0,0deg)'};
     transition: transform 0.5s ease-in-out;
+    transition-delay: ${props => props.$animationdelay};
     transform-style: preserve-3d;
 
     box-shadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
