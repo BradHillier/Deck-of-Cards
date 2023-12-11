@@ -65,50 +65,50 @@ import { useState, useEffect } from 'react';
 //
 const rotateAnimation = keyframes `
   0% {
-    transform: rotate3d(0, 1, 0, 180deg) scale(1);
+    transform: scale(1);
   }
   50% {
-    transform: rotate3d(0, 1, 0, 90deg) scale(1.3);
+    transform: scale(1.3);
   }
   100% {
-    transform: rotate3d(0, 1, 0, 0deg) scale(1);
+    transform: scale(1);
   }
 `;
 
 
 const rotateBackAnimation = keyframes `
     0% {
-        transform: rotate3d(0, 1, 0, 0deg) scale(1);
+        transform: scale(1);
     }
     50% {
-        transform: rotate3d(0, 1, 0, 90deg) scale(1.3);
+        transform: scale(1.3);
     }
     100% {
-        transform: rotate3d(0, 1, 0, 180deg) scale(1);
+        transform: scale(1);
     }
 `
 
 const shuffleLeftAnimation = keyframes`
     0% {
-        left: -0%;
+        transform: translateX(0%);
     }
     50% {
-        left: -80%;
+        transform: translateX(-80%);
     }
     80%, 100% {
-        left: -0%;
+        transform: translateX(0%);
     }
 `
 
 const shuffleRightAnimation = keyframes`
     0% {
-        right: -0%;
+        transform: translateX(0%);
     }
     50% {
-        right: -80%;
+        transform: translateX(80%);
     }
     80%, 100% {
-        right: -0%;
+        transform: translateX(0%);
     }
 `
 
@@ -122,10 +122,12 @@ const CardContainer = styled.div.attrs(props => ({
 }))`
         width: 81px;
         height: 119px;
-        transform: translate(-50%, -50%);
         perspective: 1200px;
         margin: 5px;
         position: absolute;
+        animation: ${props => props.$animation} 0.6s ${props => props.$animationRepeat} ease-in-out forwards;
+        animation-delay: ${props => props.$animationdelay};
+        animation-play-state: ${props => props.$animate ? "running" : "paused"};
     `
 
 const CardBody = styled.div`
@@ -137,11 +139,10 @@ const CardBody = styled.div`
     border-radius: 6px;
     cursor: pointer;
     margin: 0 auto;
-    animation: ${props => props.$animation} 0.6s ${props => props.$animationRepeat} ease-in-out forwards;
-    animation-direction: ${props => props.isFaceUp ? 'reverse' : 'normal'};
-    animation-delay: ${props => props.$animationdelay};
-    animation-play-state: ${props => props.$animate ? "running" : "paused"};
+    transform: ${props => props.$faceUp ? 'rotate3d(0,1,0,180deg)' : 'rotate3d(0,1,0,0deg)'};
+    transition: transform 0.5s ease-in-out;
     transform-style: preserve-3d;
+
     box-shadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
   `;
 
@@ -156,6 +157,7 @@ const CardContent = styled.div`
     overflow: hidden;
     top: 0;
     left: 0;
+    backface-visibility: hidden;
     `
 
 const Front = styled(CardContent).attrs(props => ({
@@ -176,7 +178,6 @@ const Front = styled(CardContent).attrs(props => ({
 const Back = styled(CardContent).attrs(props => ({
     style: {
         zIndex: !props.rotated,
-        backfaceVisibility: !props.isFaceUp? 'hidden' : 'visible',
     }
 }))`
         tranform-style: preserve-3d;
@@ -198,8 +199,6 @@ export const Card3D = ({
 
     const [frontContent, backContent] = children;
     const [animationRepeat, setAnimationRepeat] = useState(0)
-    const [faceUp, setFaceUp] = useState(false);
-    const [isAnimating, setAnimating] = useState(false);
 
     const animation = () => {
         // This and the shuffle function in App ned to be synced some how
@@ -218,33 +217,14 @@ export const Card3D = ({
         return rotateAnimation;
     }
 
-    useEffect(() => {
-        // Start the rotation animation
-        setFaceUp(!faceUp);
-        setAnimating(true);
-
-        // Adjust prop used for back-visibility
-        const handleAnimationEnd = () => {
-            setAnimating(false);
-        }
-
-        const cardContainer = document.getElementById(`card-${id}`).parentNode.parentNode;
-        if (cardContainer) {
-            cardContainer.addEventListener('animationend', handleAnimationEnd, {once: true});
-            // clean 
-            return () => {
-                cardContainer.removeEventListener('animationend', handleAnimationEnd);
-            }
-        }
-    }, [isFaceUp])
 
     return (
-        <CardContainer $top={top} $left={left} $zIndex={zIndex} $transition={transition} $animationdelay={animationdelay}>
-            <CardBody $faceUp={faceUp} $animation={animation} $animate={animate} $animationdelay={animationdelay} $animationRepeat={animationRepeat}> 
+        <CardContainer $top={top} $left={left} $zIndex={zIndex} $transition={transition} $animation={animation} $animationdelay={animationdelay} $animate={animate} $animationRepeat={animationRepeat}>
+            <CardBody $faceUp={isFaceUp} $animation={animation} $animate={animate} $animationdelay={animationdelay} $animationRepeat={animationRepeat}> 
                 <Front rotated={isFaceUp}>
                     {frontContent}
                 </Front>
-                <Back rotated={isFaceUp} isAnimating={isAnimating}>
+                <Back rotated={isFaceUp}> 
                     {backContent}
                 </Back>
             </CardBody>

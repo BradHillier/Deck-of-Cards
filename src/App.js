@@ -11,8 +11,8 @@ const IMGs = getAllSVGs();
 
 
 
-const x_start = window.innerWidth / 2;
-const y_start = window.innerHeight / 2;
+const x_start = window.innerWidth / 2 - 40.5;
+const y_start = window.innerHeight / 2 - 69.5;
 
 function App() {
 
@@ -66,7 +66,6 @@ function App() {
             if (state.deck[id].isInDeck) {
                 state.cardsInPlay++;
                 state.inDeck = state.inDeck.filter(num => num !== id);
-                console.log(state.inDeck);
             }
             moveCardToPointer(event, id);
         }
@@ -196,7 +195,7 @@ function App() {
                         z: card.id
                     },
                     transition:  `0.6s ease-in-out`,
-                    animationdelay: `${(Math.pow(card.id + 1, 1/8) - 1)}s`,
+                    animationdelay: `${(Math.pow(card.id + 2, 1/8) - 1)}s`,
                     isFaceUp: false,
                     isInDeck: true
                 }
@@ -208,7 +207,6 @@ function App() {
         // Bug related to cards in deck and card.position.z not being synced
         // the position in deck should be equivalent to the cards z-index
         let ids = state.inDeck.splice(-num);
-        console.log(ids);
         if (ids.length) {
             setState({
                 ...state,
@@ -263,7 +261,7 @@ function App() {
                 })
             })
         }
-        const cardContainer = document.getElementById(`card-51`).parentNode.parentNode;
+        const cardContainer = document.getElementById(`card-51`).parentNode.parentNode.parentNode;
         if (cardContainer && state.isShuffling) {
             cardContainer.addEventListener('animationend', handleAnimationEnd, {once: true});
             // clean 
