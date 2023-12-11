@@ -122,7 +122,7 @@ const CardContainer = styled.div.attrs(props => ({
 }))`
         width: 81px;
         height: 119px;
-        perspective: 1200px;
+        perspective: 500px;
         margin: 5px;
         position: absolute;
         animation: ${props => props.$animation} 0.6s ${props => props.$animationRepeat} ease-in-out forwards;
@@ -140,7 +140,7 @@ const CardBody = styled.div`
     cursor: pointer;
     margin: 0 auto;
     transform: ${props => props.$faceUp ? 'rotate3d(0,1,0,180deg)' : 'rotate3d(0,1,0,0deg)'};
-    transition: transform 0.5s ease-in-out;
+    transition: transform 0.6s ease-in-out;
     transition-delay: ${props => props.$animationdelay};
     transform-style: preserve-3d;
 
