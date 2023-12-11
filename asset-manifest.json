@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/Deck-of-Cards/static/css/main.d46b1896.css",
-    "main.js": "/Deck-of-Cards/static/js/main.2d17f2fd.js",
+    "main.js": "/Deck-of-Cards/static/js/main.76112a5a.js",
     "static/js/787.8eb42f38.chunk.js": "/Deck-of-Cards/static/js/787.8eb42f38.chunk.js",
     "static/media/card-back.png": "/Deck-of-Cards/static/media/card-back.70f70491db3d49c6f87a.png",
     "static/media/king_of_hearts.svg": "/Deck-of-Cards/static/media/king_of_hearts.bc127d58512470645e02d645e512763e.svg",
@@ -19,11 +19,11 @@
     "static/media/A_of_hearts.svg": "/Deck-of-Cards/static/media/A_of_hearts.77c1b36fc8cfae5dd7c31b34f9e96593.svg",
     "index.html": "/Deck-of-Cards/index.html",
     "main.d46b1896.css.map": "/Deck-of-Cards/static/css/main.d46b1896.css.map",
-    "main.2d17f2fd.js.map": "/Deck-of-Cards/static/js/main.2d17f2fd.js.map",
+    "main.76112a5a.js.map": "/Deck-of-Cards/static/js/main.76112a5a.js.map",
     "787.8eb42f38.chunk.js.map": "/Deck-of-Cards/static/js/787.8eb42f38.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.d46b1896.css",
-    "static/js/main.2d17f2fd.js"
+    "static/js/main.76112a5a.js"
   ]
 }
