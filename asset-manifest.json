@@ -1,0 +1,29 @@
+{
+  "files": {
+    "main.css": "/bradhillier.github.io/deck-of-cards/static/css/main.d46b1896.css",
+    "main.js": "/bradhillier.github.io/deck-of-cards/static/js/main.963e1cd1.js",
+    "static/js/787.8eb42f38.chunk.js": "/bradhillier.github.io/deck-of-cards/static/js/787.8eb42f38.chunk.js",
+    "static/media/card-back.png": "/bradhillier.github.io/deck-of-cards/static/media/card-back.70f70491db3d49c6f87a.png",
+    "static/media/king_of_hearts.svg": "/bradhillier.github.io/deck-of-cards/static/media/king_of_hearts.bc127d58512470645e02d645e512763e.svg",
+    "static/media/queen_of_hearts.svg": "/bradhillier.github.io/deck-of-cards/static/media/queen_of_hearts.651ee3891a359907800c7f89a8204614.svg",
+    "static/media/jack_of_hearts.svg": "/bradhillier.github.io/deck-of-cards/static/media/jack_of_hearts.e1249e66d4316c8fbe4b2cc5aaf6422e.svg",
+    "static/media/10_of_hearts.svg": "/bradhillier.github.io/deck-of-cards/static/media/10_of_hearts.94c119962fbbff3f31c7cf52a1d0f4c9.svg",
+    "static/media/9_of_hearts.svg": "/bradhillier.github.io/deck-of-cards/static/media/9_of_hearts.aef8e133315ce77a41ea978ffbb66097.svg",
+    "static/media/8_of_hearts.svg": "/bradhillier.github.io/deck-of-cards/static/media/8_of_hearts.9767559ee59791457631a759bd9e970b.svg",
+    "static/media/7_of_hearts.svg": "/bradhillier.github.io/deck-of-cards/static/media/7_of_hearts.81b03511fa18ea221f2ba5d28db2aaf0.svg",
+    "static/media/6_of_hearts.svg": "/bradhillier.github.io/deck-of-cards/static/media/6_of_hearts.62516a62df61e66bb9f48de15b0ffe08.svg",
+    "static/media/5_of_hearts.svg": "/bradhillier.github.io/deck-of-cards/static/media/5_of_hearts.50ebcce8ca27497b2a79e05afe35facb.svg",
+    "static/media/4_of_hearts.svg": "/bradhillier.github.io/deck-of-cards/static/media/4_of_hearts.b639b583107f9b910f6bd1bee846d94b.svg",
+    "static/media/3_of_hearts.svg": "/bradhillier.github.io/deck-of-cards/static/media/3_of_hearts.7e248fc92f79ebeaa446be1001844439.svg",
+    "static/media/2_of_hearts.svg": "/bradhillier.github.io/deck-of-cards/static/media/2_of_hearts.a58171f9d08f29541ef76898f76fda35.svg",
+    "static/media/A_of_hearts.svg": "/bradhillier.github.io/deck-of-cards/static/media/A_of_hearts.77c1b36fc8cfae5dd7c31b34f9e96593.svg",
+    "index.html": "/bradhillier.github.io/deck-of-cards/index.html",
+    "main.d46b1896.css.map": "/bradhillier.github.io/deck-of-cards/static/css/main.d46b1896.css.map",
+    "main.963e1cd1.js.map": "/bradhillier.github.io/deck-of-cards/static/js/main.963e1cd1.js.map",
+    "787.8eb42f38.chunk.js.map": "/bradhillier.github.io/deck-of-cards/static/js/787.8eb42f38.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.d46b1896.css",
+    "static/js/main.963e1cd1.js"
+  ]
+}
